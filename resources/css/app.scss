@@ -1,0 +1,13 @@
+@import '../../node_modules/bootstrap/dist/css/bootstrap.css';
+@import '_style.scss';
+
+.custom-button {
+    background-color: white;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+    border: solid 2px var(--color-myOrange) !important;
+    transition: box-shadow 300ms ease-in-out;
+}
+
+.custom-button:hover {
+    box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.2);
+}

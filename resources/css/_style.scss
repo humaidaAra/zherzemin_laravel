@@ -1,0 +1,974 @@
+:root {
+    --color-myOrange: #F5861F;
+    --color-myGrey: #cbcbca;
+    --color-myWhite: #f5f5f5;
+    --color-myBlack: #1a1a1a;
+    --font-myBody: 'campton_Regular';
+    --font-myHead: 'campton_Bold';
+}
+
+::selection {
+    background-color: var(--color-myBlack);
+    color: var(--color-myOrange);
+}
+
+
+/* .tox:not([dir=rtl]),
+.tox-tinymce-aux,
+.tox {
+    display: none;
+} */
+
+@font-face {
+    font-family: 'campton_Regular';
+    src: local('Campton Font'), url('../../public/CamptonFont/CamptonMedium.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'campton_Bold';
+    src: local('Campton Font'), url('../../public/CamptonFont/CamptonBold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    color: var(--color-myBlack);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-myBody);
+    background-color: var(--color-myWhite);
+    overflow-x: hidden;
+}
+
+h2 {
+    font-family: var(--font-myHead);
+}
+
+
+/* *********************HUMAIDA EDIT START************************ */
+
+/* #drop {
+    display: none;
+} */
+
+.shared_container
+{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: start;
+    border: 1px solid var(--color-myGrey);
+}
+
+.shared_media
+{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin:5x;
+    padding: 5px;
+}
+
+.media_src
+{
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.inner {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start
+}
+
+.socialtype {
+    width: 90px;
+    height: 50px;
+}
+
+.selected_elements {
+    width: auto;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+}
+
+/*category check tuggle */
+
+.ccenter
+{
+    display: flex;
+    justify-content: center;
+
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 90px;
+    height: 100%;
+    margin: auto 5px;
+  }
+  
+  .switch input {display:none;}
+  
+  .slider {
+    position: relative;
+    width: 100%;
+    height: 26px;
+    cursor: pointer;
+    /* top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0; */
+    background-color: var(--color-myGrey);
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+     left: 0;
+    /*bottom: 4px; */
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: var(--color-myOrange);
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px var(--color-myBlack);
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(65px);
+    -ms-transform: translateX(65px);
+    transform: translateX(65px);
+  }
+  
+  /*------ ADDED CSS ---------*/
+  .on
+  {
+    display: none;
+    color: var(--color-myWhite);
+
+  }
+  
+  .on, .off
+  {
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+    font-size: 14px;
+    font-family: Verdana, sans-serif;
+  }
+  .off
+  {
+    color: var(--color-myBlack);
+  }
+  
+  input:checked+ .slider .on
+  {display: block;}
+  input:checked + .slider .off
+  {display: none;}
+  
+  /*--------- END --------*/
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before{
+    border-radius: 50%;}
+
+    .post_reference
+    {
+        display: none;
+    }
+
+
+/* *********************HUMAIDA EDIT END************************ */
+
+
+/* -------------------------header-------------------------- */
+
+header {
+    height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+#navBG {
+    background-color: var(--color-myWhite);
+    position: fixed;
+    z-index: 99;
+    width: 100%;
+    height: 70px;
+}
+
+.navbar {
+    width: 100%;
+    padding: 0px 15px;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    position: fixed;
+    z-index: 100;
+}
+
+.nav-logo {
+    display: flex;
+    /* justify-content: right; */
+    /* position: relative; */
+}
+
+.nav-menu {
+    padding: 50px 10px;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 25%;
+    height: 100%;
+    list-style: none;
+    background: var(--color-myGrey);
+    display: flex;
+    flex-direction: column;
+    /* justify-content: left; */
+    /* align-items: center; */
+    text-align: left;
+}
+
+.nav-item {
+    padding: 10px 15px;
+}
+
+.nav-link {
+    position: relative;
+    text-decoration: none;
+    color: var(--color-myBlack);
+    display: inline-block;
+    /* margin: 0px 10px; */
+    font-size: 20px;
+    transition: letter-spacing ease-in-out 600ms;
+    z-index: 1;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+    color: var(--color-myBlack);
+    transition: 0.5s;
+    letter-spacing: 5px;
+    transition: letter-spacing ease-in-out 600ms;
+}
+
+
+/* The container needed to position the  content */
+
+.menu-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.menu-dropdown:hover,
+.menu-dropdown:focus {
+    border-left: 2px solid var(--color-myOrange);
+}
+
+
+/* Dropdown Content (Hidden by Default) */
+
+.menu-dropdown-content {
+    display: none;
+    position: relative;
+    left: 20px;
+    z-index: 1;
+}
+
+.menu-dropdown-content a {
+    color: black;
+    font-size: 18px;
+    text-decoration: none;
+    display: block;
+}
+
+
+/* .menu-dropdown-content a:hover {
+    background-color: var(--color-myWhite);
+} */
+
+
+/* .menu-dropdown:hover .menu-dropdown-content {
+    display: block;
+} */
+
+.hamburger {
+    display: none;
+}
+
+.bar {
+    display: block;
+    width: 30px;
+    height: 3px;
+    margin: 5px auto;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    background-color: var(--color-myBlack);
+    border-radius: 50px;
+}
+
+.bar:nth-child(3) {
+    background-color: var(--color-myOrange);
+}
+
+.crossLine {
+    position: relative;
+    cursor: pointer;
+    z-index: 0;
+    width: 100%;
+    height: 0px;
+}
+
+.crossLine:before,
+.crossLine:after {
+    content: '';
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    top: 50%;
+    margin-top: -0.5px;
+    background: var(--color-myOrange);
+}
+
+.crossLine:before {
+    left: -2.5px;
+}
+
+.crossLine:after {
+    right: 2.5px;
+    background: var(--color-myOrange);
+    transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.crossLine:hover:before {
+    background: var(--color-myOrange);
+    width: 100%;
+    transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.crossLine:hover:after {
+    background: transparent;
+    width: 100%;
+    transition: 0s;
+}
+
+
+/* -----------------------button and form styles---------------------------- */
+
+.btnContainer {
+    display: flex;
+    justify-content: center;
+    margin: 40px 0px;
+    width: 100%;
+    height: 100%;
+}
+
+.bttn {
+    width: 100%;
+    height: 100%;
+    max-height: 40px;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+    border: solid 2px var(--color-myOrange);
+    font-family: var(--font-myBody);
+    font-size: large;
+    position: relative;
+}
+
+.bttn:hover {
+    box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 300ms ease-in-out;
+}
+
+.formBackground {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: row;
+    width: 100%;
+    height: 520px;
+    overflow-y: scroll;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    /* height: 100%; */
+    position: relative;
+    /* overflow-y: scroll; */
+}
+
+
+// input,
+// select,
+// option,
+// textarea {
+//     outline: none;
+//     font-size: large;
+//     margin: 10px 0px;
+//     padding: 0px 10px;
+//     width: 100%;
+//     height: 40px;
+//     border-radius: 5px;
+//     border: solid 2px var(--color-myBlack);
+
+// }
+input,
+select,
+textarea {
+    outline: none;
+    font-size: large;
+    margin: 10px 0px;
+    padding: 0px 10px;
+    width: 100%;
+    height: 200px;
+    border-radius: 5px;
+    border: solid 2px var(--color-myBlack);
+
+}
+textarea
+{
+    height: auto;
+}
+
+input[type="text"]:hover,
+select:hover,
+option:hover,
+textarea:hover {
+    box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 300ms ease-in-out;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border: solid 2px var(--color-myOrange);
+}
+
+.checkboxContainer {
+    width: 100%;
+    display: flex;
+    /* align-items: center; */
+    justify-content: left;
+}
+
+input[type="checkbox"] {
+    display: none;
+}
+
+input[type="checkbox"]+label {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin: 20px 0px;
+    color: var(--color-myBlack);
+    cursor: pointer;
+}
+
+
+/* input[type="checkbox"]+label:last-child {
+    margin-bottom: 0;
+} */
+
+input[type="checkbox"]+label:before {
+    content: '';
+    display: block;
+    width: 25px;
+    height: 25px;
+    border: 2px solid var(--color-myBlack);
+    border-radius: 3px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    -webkit-transition: all .12s, border-color .08s;
+    transition: all .12s, border-color .08s;
+}
+
+input[type="checkbox"]:checked+label:before {
+    width: 10px;
+    top: -5px;
+    left: 5px;
+    border-radius: 0;
+    border: 3px solid var(--color-myOrange);
+    border-radius: 2px;
+    border-top-color: transparent;
+    border-left-color: transparent;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.radioBtns {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+input[type="radio"] {
+    margin: 0px 5px;
+    width: 30px;
+    cursor: pointer;
+}
+
+
+.radioBtns label {
+    position: relative;
+    margin-right: 20px;
+}
+
+
+/* ---------------------------------Dropdown Form------------------------------------ */
+
+.dropbtn {
+    width: 100%;
+    height: 100%;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+    border: solid 2px var(--color-myOrange);
+    font-size: large;
+    cursor: pointer;
+}
+
+.dropbtn:hover {
+    box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 300ms ease-in-out;
+}
+
+
+/* .dropbtn:hover,
+.dropbtn:focus {
+    
+} */
+
+
+/* .dropdown {
+    position: relative;
+    display: inline-block;
+} */
+
+.dropdown-content {
+    /* display: none; */
+    /* left: -150px;
+    position: absolute;
+    background-color: var(--color-myWhite);
+    width: 400%;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1; */
+}
+
+.show {
+    display: block;
+}
+
+/* -----------side imgs display---------- */
+
+.shared_folder_container {
+    position: relative;
+    top: 312px;
+    /* height: 100%; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.display_shared_folder {
+    display: flex;
+    width: 400px;
+    height: 400px;
+    background-color: white;
+    margin: 20px;
+    border: 1px solid var(--color-myGrey);
+    overflow-y: scroll;
+}
+
+.img_box {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center;
+    align-items: center; */
+    width: 150px;
+    height: 180px;
+    margin: 10px;
+}
+
+
+/* .img_size {
+    width: 100%;
+} */
+
+
+/* -------------------------loginPage-------------------------- */
+
+.zherzaminIcon {
+    margin-top: 120px;
+    width: 500px;
+}
+
+.loginSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.formSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.google_img {
+    width: 100px;
+    color: var(--color-myBlack);
+}
+
+.devider {
+    background-color: var(--color-myGrey);
+    width: 1px;
+    height: 400px;
+    margin: 60px;
+}
+
+.forgotPassLink {
+    color: var(--color-myOrange);
+    font-weight: lighter;
+}
+
+
+/* -----------------------Main---------------------------- */
+
+main {
+    width: 71%;
+    position: absolute;
+    right: 2%;
+}
+
+.firstSection {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    justify-content: left;
+    /* padding: 100px 0px; */
+}
+
+.sectionHeader {
+    width: 75%;
+    height: 50px;
+    padding: 0px 30px;
+    background-color: var(--color-myWhite);
+    box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+}
+
+h3 {
+    font-size: 20px;
+    margin: 15px;
+}
+
+.bttnPosition {
+    position: relative;
+    margin-left: 40px;
+    width: 250px;
+}
+
+.bttnPosition a {
+    text-decoration: none;
+    color: var(--color-myBlack);
+}
+
+.sectionContent {
+    padding: 60px 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.del {
+    text-decoration: none;
+    color: red;
+}
+
+.del:hover {
+    color: red;
+}
+
+.sectionFooter {
+    width: 75%;
+    height: 60px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    box-shadow: 0px 0px 10px -1px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-myWhite);
+}
+.pagination_holder
+{
+    display: flex;
+    flex-direction: row;
+    margin: 0px 20px;
+}
+.pg_btn
+{
+    font-size: 14px;
+    margin: 2px;
+}
+.pagination_holder span
+{
+    margin: 2px;
+}
+/*------------------Large Screen------------------------------*/
+
+@media only screen and (min-width: 1025px)
+{
+    .formBackground
+    {
+        height: 600px;
+    }
+}
+/* ------------------Mobile responsive------------------- */
+
+@media only screen and (max-width: 850px) {
+    /*---------------Burger navbar---------------*/
+    html {
+        overflow-x: hidden;
+    }
+    header {
+        height: 50px;
+        display: flex;
+        align-items: center;
+    }
+    #navBG {
+        background-color: rgba(0, 0, 0, 0);
+    }
+    .navbar {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        z-index: 100;
+    }
+    .nav-logo {
+        /* margin: 10px; */
+        width: 50%;
+    }
+    .nav-menu {
+        padding: 0px;
+        position: fixed;
+        display: flex;
+        left: 110%;
+        top: 50px;
+        flex-direction: column;
+        background-color: var(--color-myGrey);
+        // width: 100%;
+        // height: auto;
+        border-radius: 8px;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+    }
+    .nav-menu.active {
+        margin: 0px;
+        padding: 0px;
+        left: 0;
+    }
+    .nav-item {
+        padding: 0px;
+        margin: 5px 0px;
+    }
+    .hamburger {
+        display: block;
+        cursor: pointer;
+        margin-right: 20px;
+    }
+    .hamburger.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+    .hamburger.active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    .hamburger.active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+    /* -------------button and form styles---------------- */
+    .btnContainer {
+        margin: 30px 0px;
+        width: 250px;
+        height: 100%;
+    }
+    .bttn {
+        width: 50%;
+        height: 100%;
+        margin: 10px;
+        border-radius: 5px;
+        background-color: white;
+        box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+        border: solid 2px var(--color-myOrange);
+        font-size: medium;
+    }
+    .form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 40px;
+    }
+    input,
+    select,
+    option{
+        outline: none;
+        font-size: small;
+        margin: 10px;
+        padding: 10px;
+        width: 100%;
+        // height: 40px;
+        border-radius: 5px;
+        border: solid 2px var(--color-myBlack);
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border: solid 2px var(--color-myOrange);
+    }
+    /* --------------------loginPage------------------- */
+    .zherzaminIcon {
+        margin: 50px;
+        width: 200px;
+    }
+    .loginSection {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+    .formSection {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    .formSection img {
+        width: 50px;
+        /* color: var(--color-myBlack); */
+    }
+    .gBtn {
+        width: 100%;
+    }
+    .devider {
+        background-color: var(--color-myGrey);
+        width: 200px;
+        height: 1px;
+        margin: 50px 0px;
+    }
+    .forgotPassLink {
+        font-size: small;
+    }
+    /*---------------Main---------------*/
+    main {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        position: relative;
+        right: 0;
+        z-index: 1;
+        font-size: 14px;
+    }
+    .firstSection {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        justify-content: center;
+        text-align: center;
+        z-index: 1;
+    }
+    .sectionHeader {
+        width: 100%;
+        height: 100px;
+        padding: 0px 0px;
+        background-color: var(--color-myWhite);
+        box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+    }
+    h3 {
+        font-size: 18px;
+    }
+    .bttnPosition {
+        display: none;
+        position: fixed;
+        margin-left: 0px;
+        left: 0px;
+    }
+    .sectionContent {
+        padding: 50px 10px 0px 10px;
+        position: relative;
+        z-index: 0;
+    }
+    .sectionFooter {
+        width: 100%;
+        height: 60px;
+        display: flex;
+        justify-content: right;
+        align-items: center;
+        position: fixed;
+        z-index: 0;
+        bottom: 0;
+        box-shadow: 0px 0px 10px -1px rgba(0, 0, 0, 0.1);
+        background-color: var(--color-myWhite);
+    }
+}
