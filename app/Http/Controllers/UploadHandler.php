@@ -12,10 +12,11 @@ class UploadHandler extends Controller
     public function article_media_store(Request $request)
     {
         
-        // $newly_added_cover_path ='images/ariticleimages/'.Carbon::now()->toDateString() . '' .$request->file('img')->hashName();
-        // Storage::disk('public')->put($newly_added_cover_path, file_get_contents($request->img)); 
+        $newly_added_cover_path ='images/ariticleimages/'.Carbon::now()->toDateString() . '' .$request->file('img')->hashName();
+        Storage::disk('public')->put($newly_added_cover_path, file_get_contents($request->img));
         // $url = Storage::url($newly_added_cover_path);
-        return response()->json(['location'=>'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTM0lqE-tsyl5XYc9dUhDFQABLvo6w3Blq9jg&usqp=CAU']);
+        $url = asset(Storage::url($newly_added_cover_path));
+        return response()->json(['location'=>$url]);
     }
     public function event_media_store(Request $request)
     {

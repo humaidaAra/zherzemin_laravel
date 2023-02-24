@@ -123,9 +123,11 @@
         </div>
     </form>
 @endsection
+
 @section('script')
     <script>
         window.onload = (e) => {
+
             document.getElementById("ku_check").addEventListener('click', function() {
                 let form = document.querySelector("#form-ku");
                 let btn = document.querySelector("#ku_check");
@@ -139,33 +141,47 @@
 
                 form.style.display = btn.checked ? 'block' : 'none';
             });
+            const example_image_upload_handler = (blobInfo, progress) =>
+                new Promise((resolve, reject) => {
+                    console.log('xhr init');
+                    const xhr = new XMLHttpRequest();
+                    xhr.withCredentials = false;
+                    xhr.open('POST', '/api/upload/media/article');
+
+                    xhr.onload = () => {
+                        console.log('response returned');
+                        if (xhr.status === 403) {
+                            reject({
+                                message: 'HTTP Error: ' + xhr.status,
+                                remove: true
+                            });
+                            return;
+                        }
+
+                        if (xhr.status < 200 || xhr.status >= 300) {
+                            reject('HTTP Error: ' + xhr.status);
+                            return;
+                        }
+                        const json = JSON.parse(xhr.responseText);
+                        console.log('resolving')
+                        resolve(json.location);
+                    }
+                    const formData = new FormData();
+                    formData.append('img', blobInfo.blob(), blobInfo.filename());
+                    xhr.send(formData);
+                });
+
             tinymce.init({
                 selector: '#body_en',
-                plugins: 'preview  importcss searchreplace autolink autosave save directionality visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount  help  charmap  quickbars  emoticons',
+                plugins: 'preview  importcss searchreplace autolink  charmap autosave save code codesample autosave directionality visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount  help  charmap  quickbars  emoticons',
                 file_picker_types: 'image',
-                images_upload_handler: function(blobInfo, success, failure) 
-                {
-                    var xhr = new XMLHttpRequest();
-                    var formdata = new FormData();
-                    var token = '{{ csrf_token() }}';
+                images_upload_handler: example_image_upload_handler,
+                
+                }   
 
-                    xhr.open('post', '/api/upload/media/article');
-                    xhr.setRequestHeader("X-CSRF-Token", token);
-
-                    formdata.append('img', blobInfo.blob(), blobInfo.filename());
-
-                    xhr.onload = () =>
-                    {
-                        json = JSON.parse(xhr.response);
-                        console.log(json);
-                        // failure('we we ok');
-                        success(json.location);
-                        return;
-                    };
-                    xhr.send(formdata);
-                }
 
             });
+            
             /*
             images_upload_url: '{{ route('articleUpload') }}',
             image_title: true,
@@ -194,4 +210,7 @@
             */
         }
     </script>
+    {{-- <script>
+        console.log({{ Js::from(csrf_token()) }});
+    </script> --}}
 @endsection
