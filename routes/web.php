@@ -20,19 +20,17 @@ Route::get('/', function () {
     return "ur visitor";
 });
 
-
-// Route::prefix('upload/media')->group(function () {
-
-
-//     Route::get('article', [UploadHandler::class, 'request_maker']);
-
-
-//     Route::post('article', [UploadHandler::class, 'article_media_store'])->name('articleUpload');
-//     Route::post('event', [UploadHandler::class, 'event_media_store']);
-//     Route::post('exhibition', [UploadHandler::class, 'exhibition_media_store']);
-// });
-
-
+Route::prefix('upload/media')->group(function () {
+    Route::post('article', [UploadHandler::class, 'article_media_store'])->name('articleMediaUpload');
+    Route::post('event', [UploadHandler::class, 'event_media_store'])->name('eventMediaUpload');
+    Route::post('exhibition', [UploadHandler::class, 'exhibition_media_store'])->name('exhibitionMediaUpload');
+});
+Route::prefix('delete/media')->group(function () {
+    Route::post('article', [UploadHandler::class, 'delete_media'])->name('article_media_delete');
+    Route::post('event', [UploadHandler::class, 'delete_media'])->name('event_media_delete');
+    Route::post('exhibition', [UploadHandler::class, 'delete_media'])->name('exhibition_media_delete');
+});
+// ===================================================================================================================================
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('logout', [AuthenticationController::class, 'logout'])->name('logout');
@@ -44,7 +42,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::resource('tags', TagController::class);
     Route::resource('sponsers', SponserController::class);
 });
-
 
 Route::fallback(function () {
     return view("404");

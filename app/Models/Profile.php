@@ -21,45 +21,24 @@ class Profile extends Model
 
     public function contributions()
     {
-        $articles = Profile::find($this->id)->articles();
-        $events = Profile::find($this->id)->events();
-        $exhibitions = Profile::find($this->id)->exhibitions();
+        $articles = Profile::find($this->id)->articles()->get();
+        $events = Profile::find($this->id)->events()->get();
+        $exhibitions = Profile::find($this->id)->exhibitions()->get();
         return ['articles'=>$articles,
         'events'=> $events, 
         'exhibitions'=>$exhibitions];
     }
     public function articles()
     {
-        $article_profiles = DB::table('article_profile')->select('article_id')->where('profile_id', '=', $this->id)->get();
-    
-        $articles = [];
-        foreach($article_profiles as $record)
-        {
-            array_push($articles, Article::find($record->article_id));
-        } 
-        return $articles;
+        return $this->belongsToMany(Article::class, 'article_profile');
     }
     public function events()
     {
-        $event_profiles = DB::table('event_profile')->select('event_id')->where('profile_id', '=', $this->id)->get();
-    
-        $events = [];
-        foreach($event_profiles as $record)
-        {
-            array_push($events, Event::find($record->event_id));
-        } 
-        return $events;
+        return $this->belongsToMany(Event::class, 'events_profile');
     }
     public function exhibitions()
     {
-        $exhibition_profiles = DB::table('exhibition_profile')->select('exhibition_id')->where('profile_id', '=', $this->id)->get();
-    
-        $exhibitions = [];
-        foreach($exhibition_profiles as $record)
-        {
-            array_push($exhibitions, Exhibition::find($record->exhibition_id));
-        } 
-        return $exhibitions;
+        return $this->belongsToMany(Exhibition::class, 'exhibitions_profile');
     }
 
 }

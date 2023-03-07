@@ -1,7 +1,10 @@
 // App initializers (Menu,...)
 //Hamburger Menubar
+
+
 const hamburger = document.querySelector(".hamburger");
 const navMenu = document.querySelector(".nav-menu");
+
 // import Post from './post.bundle.js';
 
 if (hamburger) hamburger.addEventListener("click", mobileMenu);

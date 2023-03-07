@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,22 +28,18 @@ class Article extends Model
 
     public function creator()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
-    public function tags($article_id)
+    public function tags()
     {
-        // $article_tags = DB::table('article_tag')->where('article_id', '=', $article_id)->get();
-        return DB::table('article_tag')->where('article_id', '=', $article_id)->get();
+        return $this->belongsToMany(Tag::class, 'article_tag');
     }
-    public function sponsers($article_id)
+    public function sponsers()
     {
-        // $article_sponser = DB::table('article_sponser')->where('article_id', '=', $article_id)->get();
-        return DB::table('article_sponser')->where('article_id', '=', $article_id)->get();
+        return $this->belongsToMany(Sponser::class, 'article_sponser');
     }
-
-    public function profiles($article_id)
+    public function profiles()
     {
-        // $article_profile = DB::table('article_profile')->where('article_id', '=', $article_id)->get();
-        return DB::table('article_profile')->where('article_id', '=', $article_id)->get();
+        return $this->belongsToMany(Profile::class, 'article_profile');
     }
 }

@@ -21,11 +21,6 @@ class ExhibitionController extends Controller
         return response(view('exhibitions.index', compact('exhibitions')));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $tags = Tag::get();
@@ -38,12 +33,6 @@ class ExhibitionController extends Controller
         ]));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(ExhibitionRequest $request)
     {
         try
@@ -51,30 +40,15 @@ class ExhibitionController extends Controller
             $last_exhibition =  Exhibition::create($request->validated());
             if ($request->tags) 
             {
-                    foreach($request->tags as $tf)
-                    {
-                        DB::table('exhibition_tag')->insert([
-                            ['exhibition_id' => $last_exhibition->id, 'tag_id' => $tf]
-                        ]);
-                    }
+                 $last_exhibition->tags()->attach($request->tags);
             }
             if ($request->sponsers) 
             {
-                    foreach($request->sponsers as $sp)
-                    {
-                        DB::table('exhibition_sponser')->insert([
-                            ['exhibition_id'=> $last_exhibition->id, 'sponser_id'=>$sp]
-                        ]);
-                }
+                $last_exhibition->sponsers()->attach($request->sponsers);
             }
             if ($request->profiles) 
             {
-                    foreach($request->profiles as $pf)
-                    {
-                        DB::table('exhibition_profiles')->insert([
-                            ['exhibition_id'=> $last_exhibition->id, 'profile_id'=>$pf]
-                        ]);
-                }
+                $last_exhibition->profiles()->attach($request->profiles);
             }
             if ($request->cover) 
             {
@@ -93,55 +67,78 @@ class ExhibitionController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $tags = Tag::get();
         $sponsers = Sponser::get();
         $profiles = Profile::get();
+
         $exhibition = Exhibition::find($id);
-        return response(view('exhibitions.create')->with([
+        $exhibition_tags = array_map(
+            function ($element) {
+                return $element['id'];
+            },
+            $exhibition->tags()->get()->toArray()
+        );
+        $exhibition_sponsers = array_map(
+            function ($element) {
+                return $element['id'];
+            },
+            $exhibition->sponsers()->get()->toArray()
+        );
+        $exhibition_profiles = array_map(
+            function ($element) {
+                return $element['id'];
+            },
+            $exhibition->profiles()->get()->toArray()
+        );
+
+
+        return view('exhibitions.edit')->with([
+            'exhibition' => $exhibition,
+            'exhibition_tags' => $exhibition_tags,
+            'exhibition_sponsers' => $exhibition_sponsers,
+            'exhibition_profiles' => $exhibition_profiles,
             'tags' => $tags,
             'sponsers' => $sponsers,
-            'profiles' => $profiles,
-            'exhibition'=> $exhibition
-        ]));
+            'profiles' => $profiles
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            
+            $exhibition = Exhibition::find($id);
+            $exhibition->update($request->validated());
+            if ($request->tags) {
+                $exhibition->tags()->sync($request->tags);
+            }
+            if ($request->sponsers) {
+                $exhibition->sponsers()->sync($request->sponsers);
+            }
+            if ($request->profiles) {
+                $exhibition->profiles()->sync($request->profiles);
+            }
+
+            if ($request->cover) {
+                $newly_added_cover_path = 'images/exhibitionimages/' . Carbon::now()->toDateString() . '' . $request->file('cover')->hashName();
+                Storage::disk('public')->put($newly_added_cover_path, file_get_contents($request->cover));
+                $url = Storage::url($newly_added_cover_path);
+                $exhibition->update(['cover' => $url]);
+            }
+            return redirect('/admin/exhibitions');
+        } catch (Exception $ex) {
+            dd($ex);
+            // return redirect('/admin/articles')->withErrors('could not perform the action');
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         Exhibition::find($id)->delete();

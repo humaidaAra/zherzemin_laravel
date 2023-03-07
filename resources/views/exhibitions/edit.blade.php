@@ -1,12 +1,12 @@
 @extends('index')
 
 @section('title')
-    Create new article
+    Exhibition
 @endsection
 
 @section('content')
     @vite('resources/js/tinymce/js/tinymce/tinymce.min.js')
-    <h3><i class="fa fa-plus"></i> Create new article</h3>
+    <h3><i class="fa fa-plus"></i> Update exhibition</h3>
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -16,30 +16,36 @@
             </ul>
         </div>
     @endif
-    <form method="POST" action="{{ route('articles.store') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('exhibitions.update', $exhibition->id)}}" enctype="multipart/form-data">
         @csrf
+        @method('PUT')
         <div class="row">
             <div class="col">
                 <div id="form-en">
                     <div>
-                        <input type="text" name="title_en" id="title_en" placeholder="Title (EN)" value="{{ old('title_en') }}" required>
+                        <input type="text" name="title_en" id="title_en" placeholder="Title (EN)" value="{{ $exhibition->title_en }}" required>
                     </div>
                     <div>
-                        <textarea name="description_en" placeholder="Short Description (EN)" rows="2">{{ old('description_en') }}</textarea>
+                        <textarea name="description_en" placeholder="Short Description (EN)" rows="2">{{ $exhibition->description_en }}</textarea>
                     </div>
                     <div>
-                        <textarea name="body_en" class="bodies" id="body_en" placeholder="Content (EN)" rows="6">{{ old('body_en') }}</textarea>
+                        <textarea name="body_en" class="bodies" id="body_en" placeholder="Content (EN)" rows="6">{{ $exhibition->body_en}}</textarea>
                     </div>
                 </div>
                 <hr>
                 <div id="lang-options">
                     <div class="row">
                         <div class="col-auto">
-                            <input type="checkbox" name="ku_check" id="ku_check">
+                            <input type="checkbox" name="ku_check" @if ($exhibition->title_ku)
+                            checked
+                            @endif 
+                            id="ku_check">
                             <label for="ku_check">KU</label>
                         </div>
                         <div class="col-auto">
-                            <input type="checkbox" name="ar_check" id="ar_check">
+                            <input type="checkbox" name="ar_check" @if ($exhibition->title_ar)
+                                checked
+                                @endif id="ar_check">
                             <label for="ar_check">AR</label>
                         </div>
                     </div>
@@ -47,24 +53,24 @@
                 </div>
                 <div id="form-ku" style="display:none;">
                     <div>
-                        <input type="text" name="title_ku" value="{{ old('title_ku') }}" placeholder="Title (KU)">
+                        <input type="text" name="title_ku" value="{{ $exhibition->title_ku }}" placeholder="Title (KU)">
                     </div>
                     <div>
-                        <textarea name="description_ku" placeholder="Short Description (KU)" rows="2">{{ old('description_ku') }}</textarea>
+                        <textarea name="description_ku" placeholder="Short Description (KU)" rows="2">{{ $exhibition->description_ku }}</textarea>
                     </div>
                     <div>
-                        <textarea name="body_ku" class="bodies" placeholder="Content (KU)" rows="6">{{ old('body_ku') }}</textarea>
+                        <textarea name="body_ku" class="bodies" placeholder="Content (KU)" rows="6">{{ $exhibition->body_ku}}</textarea>
                     </div>
                 </div>
                 <div id="form-ar" style="display:none;">
                     <div>
-                        <input type="text" name="title_ar" value="{{ old('title_ar') }}" placeholder="Title (آر)">
+                        <input type="text" name="title_ar" value="{{ $exhibition->title_ar }}" placeholder="Title (آر)">
                     </div>
                     <div>
-                        <textarea name="description_ar" placeholder="Short Description (آر)" rows="2">{{ old('description_ar') }}</textarea>
+                        <textarea name="description_ar" placeholder="Short Description (آر)" rows="2">{{ $exhibition->description_ar }}</textarea>
                     </div>
                     <div>
-                        <textarea name="body_ar" class="bodies" placeholder="Content (آر)" rows="6">{{ old('body_ar') }}</textarea>
+                        <textarea name="body_ar" class="bodies" placeholder="Content (آر)" rows="6">{{ $exhibition->body_ar }}</textarea>
                     </div>
                 </div>
             </div>
@@ -74,9 +80,12 @@
                 <div class="row">
                     <div class="col-auto">
                         <input type='hidden' name='featured'value='off'>
-                        <input type="checkbox" name="featured" id="featured">
+                        <input type="checkbox" name="featured" {{$exhibition->featured ==1? 'checked':''}} id="featured">
                         <label for="featured">Featured</label>
                     </div>
+                </div>
+                <div>
+                    <input type="datetime-local" value="{{$exhibition->start_date}}" name="start_date" id="start_date" class="date">
                 </div>
                 <div>
                     <input type="file" name="cover" id="uploadMedia" accept="media_type" placeholder="Choose a cover">
@@ -86,17 +95,27 @@
                     <select name="tags[]" id="tags" data-placeholder="Select Tags" class="select" multiple>
                         @if ($tags)
                             @foreach ($tags as $tag)
-                                <option value="{{ $tag->id }}" {{ in_array($tag->id, old('tags', [])) ? 'selected' : '' }}>{{ $tag->name_en }}</option>
+                                <option value="{{ $tag->id }}" 
+                                {{  
+                                    in_array($tag->id, $exhibition_tags) ? 'selected' : '' 
+                                }}
+                                >{{ $tag->name_en }}
+                                </option>
                             @endforeach
                         @endif
-                    </select>
+                    </select>   
                 </div>
                 <div>
-                    <label for="sponsers">Sponsers:</label>
-                    <select name="sponsers[]" id="sponsers" data-placeholder="Select Sponsers" class="select" multiple>
+                    <label for="sponsers">Sponsors:</label>
+                    <select name="sponsers[]" id="sponsers" data-placeholder="Select Sponsors" class="select" multiple>
                         @if ($sponsers)
                             @foreach ($sponsers as $sponser)
-                                <option value="{{ $sponser->id }}" {{ in_array($sponser->id, old('sponsers', [])) ? 'selected' : '' }}>{{ $sponser->name }}</option>
+                                <option value="{{ $sponser->id }}"
+                                    {{  
+                                        in_array($sponser->id, $exhibition_sponsers) ? 'selected' : '' 
+                                    }}
+                                    >{{ $sponser->name }}
+                                </option>
                             @endforeach
                         @endif
                     </select>
@@ -106,17 +125,23 @@
                     <select name="profiles[]" id="profiles" data-placeholder="Select Profiles" class="select" multiple>
                         @if ($profiles)
                             @foreach ($profiles as $profile)
-                                <option value="{{ $profile->id }}" {{ in_array($profile->id, old('profiles', [])) ? 'selected' : '' }}>{{ $profile->name }}</option>
+                                <option value="{{ $profile->id }}" 
+                                    
+                                    {{
+                                        in_array($profile->id, $exhibition_profiles) ? 'selected' : '' 
+                                    }}
+                                    
+                                    >{{ $profile->name }}</option>
                             @endforeach
                         @endif
                     </select>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <button type="submit" class="bttn"><i class="fa fa-check"></i> Publish</button>
+                        <button type="submit" class="bttn"><i class="fa fa-check"></i> Update</button>
                     </div>
                     <div class="col">
-                        <button type="reset" class="bttn text-muted"><i class="fa fa-undo text-muted"></i> Clear</button>
+                        <button type="reset" class="bttn text-muted"><i class="fa fa-undo text-muted"></i> Clear All</button>
                     </div>
                 </div>
             </div>
@@ -144,48 +169,49 @@
                     form.style.display = btn.checked ? 'block' : 'none';
                 });
 
-
                 if (kucheck.checked) {
                     document.querySelector("#form-ku").style.display = 'block'
                 }
                 if (archeck.checked) {
                     document.querySelector("#form-ar").style.display = 'block'
                 }
-
-                const example_image_upload_handler =  (blobInfo, progress) =>
+                const example_image_upload_handler = (blobInfo, progress) =>
                     new Promise((resolve, reject) => {
-                    let xhr = new XMLHttpRequest();
-                    xhr.withCredentials = false;
-                    xhr.open('POST', '/upload/media/article');
-                    xhr.setRequestHeader('X-CSRF-TOKEN', {{ Js::from(csrf_token()) }})
-                    xhr.onload = () => {
-                        if (xhr.status === 403) {
-                            reject({
-                                message: 'HTTP Error: ' + xhr.status,
-                                remove: true
-                            });
-                            return;
-                        }
+                        let xhr = new XMLHttpRequest();
+                        xhr.withCredentials = false;
+                        xhr.open('POST', '/upload/media/exhibition');
+                        xhr.setRequestHeader('X-CSRF-TOKEN', {{ Js::from(csrf_token()) }})
+                        xhr.onload = () => {
+                            console.log('response returned');
+                            if (xhr.status === 403) {
+                                reject({
+                                    message: 'HTTP Error: ' + xhr.status,
+                                    remove: true
+                                });
+                                return;
+                            }
 
-                        if (xhr.status < 200 || xhr.status >= 300) {
-                            reject('HTTP Error: ' + xhr.status);
-                            return;
+                            if (xhr.status < 200 || xhr.status >= 300) {
+                                reject('HTTP Error: ' + xhr.status);
+                                return;
+                            }
+                            const json = JSON.parse(xhr.responseText);
+                            console.log('resolving')
+                            resolve(json.location);
                         }
-                        const json = JSON.parse(xhr.responseText);
-                        resolve(json.location);
-                    }
-                    const formData = new FormData();
-                    formData.append('img', blobInfo.blob(), blobInfo.filename());
-                    xhr.send(formData);
-                });
+                        const formData = new FormData();
+                        formData.append('img', blobInfo.blob(), blobInfo.filename());
+                        xhr.send(formData);
+                    });
 
                 const sendDeleteXHR = function(url) {
                     new Promise((resolve, reject) => {
                         let xhr = new XMLHttpRequest();
                         xhr.withCredentials = false;
-                        xhr.open('POST', '/delete/media/article');
+                        xhr.open('POST', '/delete/media/exhibition');
                         xhr.setRequestHeader('X-CSRF-TOKEN', {{ Js::from(csrf_token()) }})
                         xhr.onload = () => {
+                            console.log('response returned');
                             if (xhr.status === 403) {
                                 reject({
                                     message: 'HTTP Error: ' + xhr.status,
@@ -214,39 +240,13 @@
                     selector: '.bodies',
                     plugins: 'preview  importcss searchreplace autolink  charmap autosave save code codesample autosave directionality visualblocks visualchars fullscreen image link media template codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount  help  charmap  quickbars  emoticons',
                     file_picker_types: 'image',
-                    // image_upload_url: '/upload/media/article',
                     images_upload_handler: example_image_upload_handler,
                     image_title: true,
-                    // automatic_uploads: true,
                     image_advtab: true,
                     file_picker_types: "image media",
-                    // file_picker_callback: function (cb, value, meta)
-                    // {
-                    //  var input = document.createElement('input');
-                    //  input.setAttribute('type', 'file');
-                    //  input.setAttribute('accept', 'image/*');
-                    //  input.addEventListener('change', function(e){
-                    //     var file = e.target.files[0];
-                    //     var reader = new FileReader();
-                    //     reader.readAsDataURL(file);
-                    //     reader.onload = function(ee)
-                    //     {
-                    //         var id = 'blobid'+(new Date()).getTime();
-                    //         var blobcache = tinymce.activeEditor.editorUpload.blobCache;
-                    //         var base64 = reader.result.split(',')[1];
-                    //         var blobinfo = blobcache.create(id, file, base64);
-                    //         blobcache.add(blobinfo);
-                    //         console.log('calling caclback on ');
-                    //         console.log(blobinfo.blobUri());
-                    //         console.log(file.name);
-                    //         cb(blobinfo.blobUri(), {img: file.name});
-                    //     }
-                    //  });
-                    //  input.click();
-                    // },
-                    // video_template_callback: function(data) {
-                    //     alert('hello');
-                    // },
+                    video_template_callback: function(data) {
+                        alert('hello');
+                    },
                     skin: 'oxide-dark',
                     content_css: "dark",
 
@@ -256,12 +256,13 @@
                                 var selectedNode = ed.selection.getNode();
 
                                 if (selectedNode && selectedNode.nodeName == 'IMG') {
-                                    // sendDeleteXHR(selectedNode.src);
+                                    sendDeleteXHR(selectedNode.src);
                                 }
                             }
                         });
                     }
                 });
+
             }
     </script>
 @endsection

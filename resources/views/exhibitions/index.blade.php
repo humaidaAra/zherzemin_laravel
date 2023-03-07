@@ -7,9 +7,17 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center">
         <h5>Exhibitions</h5>
-        <a href="{{ route('exhibitions.create') }}" class="btn btn-default custom-button"><i class="fa fa-plus"></i>New  Exhibitons</a>
+        <a href="{{ route('exhibitions.create') }}" class="btn btn-default custom-button"><i class="fa fa-plus"></i>New Exhibitons</a>
     </div>
-
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <table class="table">
         <thead>
             <tr>
@@ -25,9 +33,15 @@
                 <tr>
                     <td>{{ $key + 1 }}</td>
                     <td>{{ $exhibition->title_en }}</td>
-                    <td>{{ $exhibition->body_en }}</td>
+                    <td>{{ $exhibition->description_en }}</td>
                     <td title="{{ $exhibition->created_at }}">{{ $exhibition->created_at->diffForHumans() }}</td>
                     <td title="{{ $exhibition->updated_at }}">{{ $exhibition->updated_at->diffForHumans() }}</td>
+                    <td>
+                        <form action="{{ route('exhibitions.edit', $exhibition->id) }}" method="GET">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-secondary btn-sm"> <i class="fa fa-folder-open"></i>Open</button>
+                        </form>
+                    </td>
                     <td>
                         <form action="{{ route('exhibitions.destroy', $exhibition->id) }}" method="POST">
                             @csrf

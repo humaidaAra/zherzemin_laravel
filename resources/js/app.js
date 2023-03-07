@@ -1,6 +1,6 @@
 import './bootstrap'
 import './init.js'
-import { Axios } from "axios";
+
 
 // import './script';
 

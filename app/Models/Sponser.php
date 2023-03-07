@@ -16,4 +16,17 @@ class Sponser extends Model
             'url',
             'image'
         ];
+
+    public function articles()
+    {
+        return $this->belongsToMany(Article::class, 'article_sponser');
+    }
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'events_sponser');
+    }
+    public function exhibitions()
+    {
+        return $this->belongsToMany(Exhibition::class, 'exhibitions_sponser');
+    }
 }

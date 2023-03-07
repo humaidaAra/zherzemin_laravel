@@ -29,16 +29,46 @@ class EventRequest extends FormRequest
             $this->merge(['featured' => 0]);
         }
         $this->merge(['user_id' => auth()->user()->id]);
+        if(request()->routeIs('events.update'))
+        {
+            return [
+                'title_en' => ['nullable', 'required_without_all:title_ku,title_ar'],
+                'description_en' => ['required_without_all:description_ku,description_ar', 'max:50'],
+                'body_en' => ['required_without_all:body_ku,body_ar'],
+
+                'title_ku' => ['nullable', 'required_without_all:title_en,title_ar'],
+                'description_ku' => ['required_without_all:description_en,description_ar', 'max:50'],
+                'body_ku' => ['required_without_all:body_en,body_ar'],
+
+                'title_ar' => ['nullable', 'required_without_all:title_ku,title_en'],
+                'description_ar' => ['required_without_all:description_ku,description_en', 'max:50'],
+                'body_ar' => ['required_without_all:body_ku,body_en'],
+
+                'featured' => ['nullable'],
+                'cover' => ['nullable', 'image'],
+                'start_date' => ['required'],
+                'user_id'=>['required'],
+
+                'tags'=> ['nullable', 'array'],
+                'tags.*'=> ['numeric','exists:Tags,id'],
+
+                'sponsers'=> ['nullable', 'array'],
+                'sponsers.*'=> ['numeric', 'exists:Sponsers,id'],
+
+                'profiles'=> ['nullable', 'array'],
+                'profiles.*'=> ['numeric', 'exists:Profiles,id']
+            ];
+        }
         return [
-            'title_en' => ['nullable', 'required_without_all:title_ku,title_ar', 'unique:articles'],
+            'title_en' => ['nullable', 'required_without_all:title_ku,title_ar', 'unique:events'],
             'description_en' => ['required_without_all:description_ku,description_ar', 'max:50'],
             'body_en' => ['required_without_all:body_ku,body_ar'],
 
-            'title_ku' => ['nullable', 'required_without_all:title_en,title_ar', 'unique:articles'],
+            'title_ku' => ['nullable', 'required_without_all:title_en,title_ar', 'unique:events'],
             'description_ku' => ['required_without_all:description_en,description_ar', 'max:50'],
             'body_ku' => ['required_without_all:body_en,body_ar'],
 
-            'title_ar' => ['nullable', 'required_without_all:title_ku,title_en', 'unique:articles'],
+            'title_ar' => ['nullable', 'required_without_all:title_ku,title_en', 'unique:events'],
             'description_ar' => ['required_without_all:description_ku,description_en', 'max:50'],
             'body_ar' => ['required_without_all:body_ku,body_en'],
 

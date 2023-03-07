@@ -13,4 +13,17 @@ class Tag extends Model
     [
         'name_en',
     ];
+
+    public function articles()
+    {
+        return $this->belongsToMany(Article::class, 'article_tag');
+    }
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'article_tag');
+    }
+    public function exhibitions()
+    {
+        return $this->belongsToMany(Exhibition::class, 'article_tag');
+    }
 }

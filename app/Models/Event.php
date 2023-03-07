@@ -30,20 +30,17 @@ class Event extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    public function tags($event_id)
+    public function tags()
     {
-        // $event_tags = DB::table('event_tag')->where('event_id', '=', $event_id)->get();
-        return DB::table('event_tag')->where('event_id', '=', $event_id)->get();
+        return $this->belongsToMany(Tag::class, 'event_tag');
     }
-    public function sponsers($event_id)
+    public function sponsers()
     {
-        // $event_sponser = DB::table('event_sponser')->where('event_id', '=', $event_id)->get();
-        return DB::table('event_sponser')->where('event_id', '=', $event_id)->get();
+        return $this->belongsToMany(Sponser::class, 'event_sponser');
     }
 
-    public function profiles($event_id)
+    public function profiles()
     {
-        // $event_profile = DB::table('event_profile')->where('event_id', '=', $event_id)->get();
-        return DB::table('event_profile')->where('event_id', '=', $event_id)->get();
+        return $this->belongsToMany(Profile::class, 'event_profile');
     }
 }

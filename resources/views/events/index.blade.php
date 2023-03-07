@@ -9,7 +9,15 @@
         <h5>Events</h5>
         <a href="{{ route('events.create') }}" class="btn btn-default custom-button"><i class="fa fa-plus"></i>New  Event</a>
     </div>
-
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <table class="table">
         <thead>
             <tr>
@@ -25,9 +33,15 @@
                 <tr>
                     <td>{{ $key + 1 }}</td>
                     <td>{{ $event->title_en }}</td>
-                    <td>{{ $event->body_en }}</td>
+                    <td>{{ $event->description_en }}</td>
                     <td title="{{ $event->created_at }}">{{ $event->created_at->diffForHumans() }}</td>
                     <td title="{{ $event->updated_at }}">{{ $event->updated_at->diffForHumans() }}</td>
+                    <td>
+                        <form action="{{ route('events.edit', $event->id) }}" method="GET">
+                            @csrf
+                            <button type="submit" class="btn btn-outline-secondary btn-sm"> <i class="fa fa-folder-open"></i>Open</button>
+                        </form>
+                    </td>
                     <td>
                         <form action="{{ route('events.destroy', $event->id) }} " method="POST">
                             @csrf

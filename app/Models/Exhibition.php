@@ -30,20 +30,17 @@ class Exhibition extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    public function tags($exhibition_id)
+    public function tags()
     {
-        $exhibition_tags = DB::table('exhibition_tag')->where('exhibition_id', '=', $exhibition_id)->get();
-        return DB::table('exhibition_tag')->where('exhibition_id', '=', $exhibition_id)->get();
+        return $this->belongsToMany(Tag::class, 'exhibition_tag');
     }
-    public function sponsers($exhibition_id)
+    public function sponsers()
     {
-        $exhibition_sponser = DB::table('exhibition_sponser')->where('exhibition_id', '=', $exhibition_id)->get();
-        return DB::table('exhibition_sponser')->where('exhibition_id', '=', $exhibition_id)->get();
+        return $this->belongsToMany(Sponser::class, 'exhibition_sponser');
     }
 
-    public function profiles($exhibition_id)
+    public function profiles()
     {
-        $exhibition_profile = DB::table('exhibition_profile')->where('exhibition_id', '=', $exhibition_id)->get();
-        return DB::table('exhibition_profile')->where('exhibition_id', '=', $exhibition_id)->get();
+        return $this->belongsToMany(Profile::class, 'exhibition_profile');
     }
 }

@@ -15,11 +15,6 @@ use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         try 
@@ -32,12 +27,7 @@ class EventController extends Controller
             return view('404');
         }
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */ 
+    
     public function create()
     {
         $tags = Tag::get();
@@ -50,48 +40,21 @@ class EventController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-     */
     public function store(EventRequest $request)
     {
         try
         {
             $last_event =  Event::create($request->validated());
-            if ($request->tags) 
-            {
-                foreach($request->tags as $tags_found)
-                {
-                   
-                        DB::table('event_tag')->insert([
-                            ['event_id' => $last_event->id, 'tag_id' => $tags_found]
-                        ]);
-                }
+            if ($request->tags) {
+                $last_event->tags()->attach($request->tags);
             }
-            if ($request->sponsers) 
-            {
-                foreach($request->sponsers as $found_sponsers)
-                {
-                    
-                    DB::table('event_sponser')->insert([
-                        ['event_id'=> $last_event->id, 'sponser_id'=>$found_sponsers]
-                    ]);
-                }
+            if ($request->sponsers) {
+                $last_event->sponsers()->attach($request->sponsers);
+               
             }
-            if ($request->profiles) 
-            {
-                foreach($request->profiles as $found_profiles)
-                {
-                    
-                    DB::table('event_profile')->insert([
-                        ['event_id'=> $last_event->id, 'profile_id'=>$found_profiles]
-                    ]);
-                }
+            if ($request->profiles) {
+                $last_event->profiles()->attach($request->profiles);
             }
-
 
             if ($request->cover) 
             {
@@ -100,7 +63,7 @@ class EventController extends Controller
                 $url = Storage::url($newly_added_cover_path);
                 $last_event->update(['cover'=>$url]);
             }
-            return response(redirect('/admin/events'));
+            return redirect('/admin/events');
         }
         catch (Exception $ex) 
         {
@@ -109,49 +72,85 @@ class EventController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        //
-    }
+        $tags = Tag::get();
+        $sponsers = Sponser::get();
+        $profiles = Profile::get();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+        $event = Event::find($id);
+        $event_tags = array_map(
+            function ($element) {
+                return $element['id'];
+            },
+            $event->tags()->get()->toArray()
+        );
+        $event_sponsers = array_map(
+            function ($element) {
+                return $element['id'];
+            },
+            $event->sponsers()->get()->toArray()
+        );
+        $event_profiles = array_map(
+            function ($element) {
+                return $element['id'];
+            },
+            $event->profiles()->get()->toArray()
+        );
+
+
+        return view('events.edit')->with([
+            'event' => $event,
+            'event_tags' => $event_tags,
+            'event_sponsers' => $event_sponsers,
+            'event_profiles' => $event_profiles,
+            'tags' => $tags,
+            'sponsers' => $sponsers,
+            'profiles' => $profiles
+        ]);
+    }
+    public function update(EventRequest $request, $id)
     {
-        //
-    }
+        try {
+            
+            $event = Event::find($id);
+            $event->update($request->validated());
+            if ($request->tags) {
+                $event->tags()->sync($request->tags);
+            }
+            if ($request->sponsers) {
+                $event->sponsers()->sync($request->sponsers);
+            }
+            if ($request->profiles) {
+                $event->profiles()->sync($request->profiles);
+            }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+            if ($request->cover) {
+                $newly_added_cover_path = 'images/eventimages/' . Carbon::now()->toDateString() . '' . $request->file('cover')->hashName();
+                Storage::disk('public')->put($newly_added_cover_path, file_get_contents($request->cover));
+                $url = Storage::url($newly_added_cover_path);
+                $event->update(['cover' => $url]);
+            }
+            return redirect('/admin/events');
+        } catch (Exception $ex) {
+            dd($ex);
+            // return redirect('/admin/articles')->withErrors('could not perform the action');
+        }
+    }
     public function destroy($id)
     {
-        Event::find($id)->delete();
+        $event = Event::find($id);
+        $event->tags()->detach();
+        $event->sponsers()->detach();
+        $event->profiles()->detach();
+        $event->delete();
+
         return redirect('/admin/events');
     }
 }
